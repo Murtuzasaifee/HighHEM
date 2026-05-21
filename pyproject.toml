@@ -21,20 +21,16 @@ dependencies = [
     "fastapi>=0.115.5",
     "uvicorn[standard]>=0.34.0",
     "python-multipart>=0.0.18",
-
     # LLM & Embeddings
     "openai>=1.57.2",
     "tiktoken>=0.9.0",
-
     # LangChain (Document Loading & Processing)
     "langchain>=0.3.13",
     "langchain-openai>=0.2.12",
     "langchain-community>=0.3.13",
     "langchain-text-splitters>=0.3.4",
-
     # Vector Store
     "qdrant-client>=1.17.0",
-
     # ML Models
     # torch>=2.6.0 is required — 2.5.1 has no macOS ARM64 (macosx_*_arm64) wheel
     # No upper bound on transformers — compatibility patch in semantic_highlighter.py
@@ -43,20 +39,18 @@ dependencies = [
     "torch>=2.6.0",
     "sentencepiece>=0.2.0",
     "nltk>=3.9.0",              # required by zilliz/semantic-highlight-bilingual-v1
-
     # Document Parsing
     "pypdf>=5.1.0",
     "python-magic>=0.4.27",
     "unstructured>=0.16.14",
-
     # Utilities
     "pydantic>=2.10.3",
     "pydantic-settings>=2.8.0",
     "python-dotenv>=1.0.1",
     "aiofiles>=24.1.0",
-
     # Monitoring & Logging
     "loguru>=0.7.3",
+    "ipykernel>=7.2.0",
 ]
 
 [project.optional-dependencies]

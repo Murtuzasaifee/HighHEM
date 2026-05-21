@@ -27,10 +27,20 @@ class RAGEngine:
         self.vector_store = vector_store
         self.semantic_highlighter = semantic_highlighter
         self.hhem_validator = hhem_validator
-        self.openai_client = OpenAI(api_key=self.settings.openai_api_key)
+        self.openai_client = OpenAI(
+            api_key=self.settings.openai_api_key,
+            base_url=self.settings.openai_base_url,
+        )
 
         # Token counter
-        self.encoding = tiktoken.encoding_for_model(self.settings.llm_model)
+        try:
+            self.encoding = tiktoken.encoding_for_model(self.settings.llm_model)
+        except KeyError:
+            logger.warning(
+                f"Could not automatically map model '{self.settings.llm_model}' to a tokenizer. "
+                "Defaulting to 'cl100k_base'."
+            )
+            self.encoding = tiktoken.get_encoding("cl100k_base")
 
     def _count_tokens(self, text: str) -> int:
         """Count tokens in text."""

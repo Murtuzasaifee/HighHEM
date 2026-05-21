@@ -40,6 +40,8 @@ async def lifespan(app: FastAPI):
     # Startup
     logger.info("🚀 Starting Semantic Highlighting + HHEM RAG API")
     logger.info(f"✓ OpenAI Model: {settings.llm_model}")
+    if settings.openai_base_url:
+        logger.info(f"✓ OpenAI Base URL: {settings.openai_base_url}")
     logger.info(f"✓ Embeddings: {settings.embedding_model}")
     logger.info(f"✓ Vector Store: Qdrant @ {settings.qdrant_url}")
 

@@ -12,14 +12,18 @@ RUN apt-get update && apt-get install -y \
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 # Copy dependency files
-COPY pyproject.toml .
+COPY pyproject.toml uv.lock ./
 
 # Install Python dependencies using uv
-RUN uv pip install --system -e .
+RUN uv pip install --system -r pyproject.toml
 
-# Copy application
+# Copy application and other files
+COPY README.md .
 COPY app/ ./app/
 COPY .env.example .env.example
+
+# Install the project itself in editable mode without dependencies (fast, cached)
+RUN uv pip install --system --no-deps -e .
 
 # Create necessary directories
 RUN mkdir -p uploads data

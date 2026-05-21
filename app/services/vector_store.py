@@ -26,7 +26,10 @@ class VectorStore:
         self.client = QdrantClient(
             host=self.settings.qdrant_host, port=self.settings.qdrant_port
         )
-        self.openai_client = OpenAI(api_key=self.settings.openai_api_key)
+        self.openai_client = OpenAI(
+            api_key=self.settings.openai_api_key,
+            base_url=self.settings.openai_base_url,
+        )
         self.collection_name = self.settings.qdrant_collection_name
 
         # Initialize collection
@@ -105,12 +108,13 @@ class VectorStore:
             )
 
         # Search
-        results = self.client.search(
+        response = self.client.query_points(
             collection_name=self.collection_name,
-            query_vector=query_embedding,
+            query=query_embedding,
             limit=top_k,
             query_filter=query_filter,
         )
+        results = response.points
 
         # Format results
         documents = []
