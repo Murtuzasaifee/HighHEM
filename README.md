@@ -1,6 +1,6 @@
-# Semantic Highlighting + HHEM RAG
+# HighHEM
 
-> **Minimal FastAPI Implementation Demonstrating Cost Savings & Quality Improvements**
+> **Minimal FastAPI Implementation Demonstrating Cost Savings & Quality Improvements with Semantic Highlighting and HHEM**
 
 ## 🎯 Overview
 
@@ -29,7 +29,7 @@ This project implements a RAG (Retrieval-Augmented Generation) system with two k
 ## 📁 Project Structure
 
 ```
-semantic-hhem-rag/
+highhem/
 ├── app/
 │   ├── __init__.py
 │   ├── main.py                 # FastAPI app
@@ -70,7 +70,7 @@ semantic-hhem-rag/
 
 ```bash
 # Clone the repository
-cd semantic-hhem-rag
+cd highhem
 
 # Create virtual environment (Python 3.12) and install dependencies
 uv venv --python 3.12

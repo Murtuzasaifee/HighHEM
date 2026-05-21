@@ -1,5 +1,5 @@
 [project]
-name = "semantic-hhem-rag"
+name = "highhem"
 version = "1.0.0"
 description = "Minimal RAG implementation demonstrating cost savings and quality improvements with Semantic Highlighting and HHEM validation"
 readme = "README.md"
@@ -76,7 +76,7 @@ notebook = [
 ]
 
 [project.scripts]
-semantic-hhem-rag = "app.main:main"
+highhem = "app.main:main"
 
 [build-system]
 requires = ["hatchling"]
