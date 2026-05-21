@@ -2,12 +2,21 @@
 
 > **Minimal FastAPI Implementation Demonstrating Cost Savings & Quality Improvements with Semantic Highlighting and HHEM**
 
+[![MeshAPI Powered](https://img.shields.io/badge/Powered%20By-MeshAPI-blueviolet?style=for-the-badge&logo=openai)](https://meshapi.ai)
+[![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![Qdrant](https://img.shields.io/badge/Vector%20Database-Qdrant-red?style=for-the-badge&logo=qdrant)](https://qdrant.tech)
+
+> [!IMPORTANT]
+> **🚀 Featured Integration: MeshAPI Support**
+> HighHEM now features native, out-of-the-box integration with **[MeshAPI](https://meshapi.ai)**! MeshAPI provides a robust, unified, OpenAI-compatible API to route query and embedding requests to various frontier LLMs (e.g. GPT-4o, Claude 3.5 Sonnet, Llama 3) under a single key. By combining MeshAPI's cost-effective models with HighHEM's **Semantic Highlighting**, you can achieve up to **70% cost savings** on RAG workloads!
+
 ## 🎯 Overview
 
-This project implements a RAG (Retrieval-Augmented Generation) system with two key optimizations:
+This project implements a RAG (Retrieval-Augmented Generation) system optimized for efficiency, safety, and model flexibility:
 
-1. **Semantic Highlighting** - Reduces token usage by 30-70% through intelligent context pruning
-2. **HHEM Validation** - Detects hallucinations to improve answer reliability
+1. **Semantic Highlighting** - Prunes context intelligently at the sentence level, reducing input token usage by 30-70%.
+2. **HHEM Validation** - Validates response faithfulness using Vectara's Hughes Hallucination Evaluation Model (HHEM).
+3. **MeshAPI Integration** - Routes requests seamlessly to alternative models (e.g. custom or next-gen models like `openai/gpt-5.4`) with zero vendor lock-in.
 
 ### Key Features
 
@@ -16,12 +25,14 @@ This project implements a RAG (Retrieval-Augmented Generation) system with two k
 - ✅ HHEM validation for hallucination detection
 - ✅ Comparison endpoint (with vs without optimizations)
 - ✅ Metrics tracking and cost analysis
+- ✅ **MeshAPI & OpenAI-Compatible routing** - Full support for [MeshAPI](https://meshapi.ai), DeepSeek, Groq, OpenRouter, and Ollama.
+- ✅ **Robust Tokenization Fallbacks** - Handles custom/experimental model names seamlessly without tokenizer errors.
 
 ### Tech Stack
 
 - **Python 3.12**
 - **FastAPI** - API framework
-- **OpenAI** - LLM & embeddings (gpt-4o-mini for cost efficiency)
+- **MeshAPI / OpenAI-Compatible API** (MeshAPI, DeepSeek, Groq, Ollama, etc.) - LLM & embeddings
 - **LangChain** - Document parsing & chunking
 - **Qdrant** - Vector store
 - **Transformers** - Semantic Highlighting & HHEM models
@@ -84,8 +95,9 @@ uv pip install -e ".[dev,notebook]"
 # Copy environment template
 cp .env.example .env
 
-# Edit .env with your OpenAI API key
-OPENAI_API_KEY=sk-your-openai-api-key-here
+# Edit .env with your OpenAI or MeshAPI credentials
+OPENAI_API_KEY=your-api-key-here
+OPENAI_BASE_URL=https://api.meshapi.ai/v1  # Set custom base URL for alternative providers
 ```
 
 ### 3. Start Qdrant
@@ -270,15 +282,49 @@ All configuration is done via environment variables or `.env` file:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `OPENAI_API_KEY` | - | OpenAI API key (required) |
+| `OPENAI_API_KEY` | - | OpenAI or compatible provider API key (required) |
+| `OPENAI_BASE_URL` | - | Optional base URL for alternative endpoints (e.g. `https://api.meshapi.ai/v1`) |
 | `QDRANT_HOST` | localhost | Qdrant host |
 | `QDRANT_PORT` | 6333 | Qdrant port |
-| `EMBEDDING_MODEL` | text-embedding-3-small | OpenAI embedding model |
-| `LLM_MODEL` | gpt-4o-mini | OpenAI LLM model |
+| `EMBEDDING_MODEL` | text-embedding-3-small | Embedding model name |
+| `LLM_MODEL` | gpt-4o-mini | LLM model name |
 | `CHUNK_SIZE` | 500 | Document chunk size |
 | `CHUNK_OVERLAP` | 50 | Chunk overlap |
 | `SEMANTIC_THRESHOLD` | 0.5 | Semantic highlighting threshold |
 | `HHEM_THRESHOLD` | 0.5 | HHEM validation threshold |
+
+## 🌐 Powered by MeshAPI — Unified Model Routing & Cost Efficiency
+
+HighHEM is optimized to leverage **[MeshAPI](https://meshapi.ai)** out of the box, allowing you to access premium frontier models through a single unified endpoint. In addition, the codebase is fully compliant with any OpenAI-compatible provider (e.g. DeepSeek, Groq, OpenRouter, or local Ollama instances).
+
+### 🔥 Why MeshAPI is the Recommended Provider:
+
+1. **Unified Endpoint**: Query GPT-4o, Claude 3.5 Sonnet, Llama 3, and specialized models using a single unified API client.
+2. **Ultra-Low Latency & High Availability**: Enjoy high uptime and automatic load balancing.
+3. **Optimized Cost Performance**: Match MeshAPI's highly competitive pricing with HighHEM's **Semantic Highlighting** to get frontier LLM intelligence at a fraction of the cost.
+
+### 🛠️ Setting up MeshAPI in HighHEM
+
+Integrating MeshAPI takes less than 30 seconds. Simply modify the configuration variables in your local `.env` file:
+
+```env
+# 1. Provide your MeshAPI key
+OPENAI_API_KEY=rsk_your_meshapi_key_here
+
+# 2. Redirect the base URL to MeshAPI's endpoint
+OPENAI_BASE_URL=https://api.meshapi.ai/v1
+
+# 3. Specify the desired models (MeshAPI routes these dynamically)
+EMBEDDING_MODEL=text-embedding-3-small
+LLM_MODEL=openai/gpt-4o-mini  # Or try any other model like deepseek-chat, openai/gpt-5.4, etc.
+```
+
+### 🧠 Under the Hood: Custom Model & Tokenizer Resilience
+
+To ensure compatibility with custom model names mapped through alternative endpoints (e.g. `openai/gpt-5.4` or `deepseek-chat`), HighHEM implements custom fail-safes:
+
+- **Token Estimation Fallbacks**: Library-level tools (like `tiktoken`) fail when encountering non-standard OpenAI model names. HighHEM wraps tokenizer instantiation inside an intelligent fallback wrapper. If a model name is unrecognized, it automatically uses the standard `"cl100k_base"` encoding (or standard character-based approximations) to keep token counting accurate without raising errors.
+- **Unified Base URL Propagation**: The codebase automatically feeds `OPENAI_BASE_URL` into all client handlers (including LangChain, embedding generation pipelines, and direct OpenAI SDK instances), ensuring consistent and complete routing to MeshAPI.
 
 ## 📝 Architecture
 
